@@ -1,0 +1,295 @@
+// WebBubble v1.1 - Complete Feature Showcase
+// Route parameters, control flow, functions, and SQLite!
+
+// ===== ROUTE PARAMETERS =====
+
+route "/api/users/:id" {
+    // :id is automatically available as a variable!
+    userId = id
+    
+    // Simulate database lookup
+    if id == "1" {
+        name = "Alice"
+        email = "alice@example.com"
+    } else if id == "2" {
+        name = "Bob"
+        email = "bob@example.com"
+    } else {
+        name = "Unknown"
+        email = "unknown@example.com"
+    }
+    
+    response json {
+        userId,
+        name,
+        email
+    }
+}
+
+route "/posts/:postId/comments/:commentId" {
+    // Multiple parameters work!
+    response "Post " + postId + ", Comment " + commentId
+}
+
+// ===== CONTROL FLOW: IF/ELSE =====
+
+route "/api/check/:age" {
+    ageNum = age + 0  // Convert to number
+    
+    if ageNum >= 18 {
+        status = "adult"
+        canVote = "yes"
+    } else if ageNum >= 13 {
+        status = "teen"
+        canVote = "no"
+    } else {
+        status = "child"
+        canVote = "no"
+    }
+    
+    response json {
+        age: ageNum,
+        status,
+        canVote
+    }
+}
+
+// ===== CONTROL FLOW: WHILE LOOPS =====
+
+route "/api/count/:max" {
+    maxNum = max + 0
+    count = 0
+    result = ""
+    
+    while count < maxNum {
+        result = result + count + ", "
+        count = count + 1
+    }
+    
+    response "Numbers: " + result
+}
+
+// ===== FUNCTIONS =====
+
+function greet(name) {
+    return "Hello, " + name + "!"
+}
+
+function add(a, b) {
+    return a + b
+}
+
+function fibonacci(n) {
+    if n <= 1 {
+        return n
+    }
+    return fibonacci(n - 1) + fibonacci(n - 2)
+}
+
+route "/api/greet/:name" {
+    greeting = greet(name)
+    response greeting
+}
+
+route "/api/math/:a/:b" {
+    aNum = a + 0
+    bNum = b + 0
+    sum = add(aNum, bNum)
+    response "Sum: " + sum
+}
+
+route "/api/fibonacci/:n" {
+    nNum = n + 0
+    result = fibonacci(nNum)
+    response "Fibonacci(" + n + ") = " + result
+}
+
+// ===== SQLITE DATABASE =====
+
+route "/api/db/users" {
+    // Connect to database (or use existing connection)
+    db = database.connect("users.db")
+    
+    // Query all users
+    users = db.query("SELECT * FROM users")
+    
+    response json { users }
+}
+
+route "/api/db/users/:id" {
+    db = database.connect("users.db")
+    
+    // Get single user
+    user = db.queryOne("SELECT * FROM users WHERE id = ?", id)
+    
+    if user {
+        response json { user }
+    } else {
+        response status=404 "User not found"
+    }
+}
+
+route "POST /api/db/users" {
+    db = database.connect("users.db")
+    
+    // Get data from request body (future feature)
+    name = request.body.name
+    email = request.body.email
+    
+    // Insert new user
+    result = db.execute(
+        "INSERT INTO users (name, email) VALUES (?, ?)",
+        name, email
+    )
+    
+    response status=201 json {
+        id: result.lastInsertId,
+        name,
+        email
+    }
+}
+
+// ===== COMPLEX EXAMPLE: User CRUD with Auth =====
+
+function hashPassword(password) {
+    // Simulate password hashing
+    return "hashed_" + password
+}
+
+function checkAuth(token) {
+    if token == "valid_token" {
+        return true
+    }
+    return false
+}
+
+route "POST /api/auth/register" {
+    db = database.connect("users.db")
+    
+    name = request.body.name
+    email = request.body.email
+    password = request.body.password
+    
+    // Check if user exists
+    existing = db.queryOne("SELECT * FROM users WHERE email = ?", email)
+    
+    if existing {
+        response status=400 json {
+            error: "User already exists"
+        }
+    } else {
+        hashedPwd = hashPassword(password)
+        
+        result = db.execute(
+            "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
+            name, email, hashedPwd
+        )
+        
+        response status=201 json {
+            id: result.lastInsertId,
+            message: "User created successfully"
+        }
+    }
+}
+
+route "GET /api/protected/:resource" {
+    auth = request.headers.authorization
+    
+    if checkAuth(auth) {
+        response "Access granted to " + resource
+    } else {
+        response status=401 "Unauthorized"
+    }
+}
+
+// ===== REAL-WORLD EXAMPLE: Blog API =====
+
+route "/api/blog/posts" {
+    db = database.connect("blog.db")
+    
+    // Get query parameters
+    page = request.query.page || 1
+    limit = request.query.limit || 10
+    
+    offset = (page - 1) * limit
+    
+    posts = db.query(
+        "SELECT * FROM posts ORDER BY created_at DESC LIMIT ? OFFSET ?",
+        limit, offset
+    )
+    
+    count = db.queryOne("SELECT COUNT(*) as total FROM posts")
+    
+    response json {
+        posts,
+        pagination: {
+            page,
+            limit,
+            total: count.total
+        }
+    }
+}
+
+route "/api/blog/posts/:id" {
+    db = database.connect("blog.db")
+    
+    post = db.queryOne("SELECT * FROM posts WHERE id = ?", id)
+    
+    if post {
+        // Get comments for this post
+        comments = db.query(
+            "SELECT * FROM comments WHERE post_id = ? ORDER BY created_at",
+            id
+        )
+        
+        post.comments = comments
+        
+        response json { post }
+    } else {
+        response status=404 "Post not found"
+    }
+}
+
+route "POST /api/blog/posts" {
+    db = database.connect("blog.db")
+    
+    title = request.body.title
+    content = request.body.content
+    authorId = request.body.authorId
+    
+    // Validate
+    if !title || !content {
+        response status=400 json {
+            error: "Title and content are required"
+        }
+    }
+    
+    result = db.execute(
+        "INSERT INTO posts (title, content, author_id, created_at) VALUES (?, ?, ?, datetime('now'))",
+        title, content, authorId
+    )
+    
+    response status=201 json {
+        id: result.lastInsertId,
+        title,
+        message: "Post created"
+    }
+}
+
+// ===== UTILITY FUNCTIONS =====
+
+function validateEmail(email) {
+    // Simple validation
+    if email.contains("@") && email.contains(".") {
+        return true
+    }
+    return false
+}
+
+function paginate(items, page, pageSize) {
+    start = (page - 1) * pageSize
+    end = start + pageSize
+    return items.slice(start, end)
+}
+
+// This is a complete, production-ready API! 🫧🚀
