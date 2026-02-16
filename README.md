@@ -121,14 +121,14 @@ route "/api/fib/:n" {
 
 **Linux / macOS:**
 ```bash
-git clone https://github.com/yourusername/webbubble.git
+git clone https://github.com/ihave17bucks/WebBubble.git
 cd webbubble
 make
 ```
 
 **Windows:**
 ```bash
-git clone https://github.com/yourusername/webbubble.git
+git clone https://github.com/ihave17bucks/WebBubble.git
 cd webbubble
 build.bat
 ```
@@ -219,4 +219,4 @@ MIT License - See [LICENSE](./LICENSE)
 
 ---
 
-**Star us on GitHub!** ⭐
+**Star me on GitHub!** ⭐
