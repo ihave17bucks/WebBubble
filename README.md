@@ -1,7 +1,7 @@
 # WebBubble 🫧
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![GitHub stars](https://img.shields.io/github/stars/yourusername/webbubble?style=social)](https://github.com/yourusername/webbubble)
+[![GitHub stars](https://img.shields.io/github/stars/yourusername/webbubble?style=social)](https://github.com/ihave17bucks/WebBubble)
 [![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20Windows-blue)](https://github.com/yourusername/webbubble)
 [![Version](https://img.shields.io/badge/version-1.1-purple)](https://github.com/yourusername/webbubble)
 
