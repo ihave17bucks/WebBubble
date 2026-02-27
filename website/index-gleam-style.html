@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebBubble 🫧 - A friendly framework for building fast web systems that scale!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: #FAF6F1;
+            color: #2D2D2D;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+            background: #FAF6F1;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2D2D2D;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #2D2D2D;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #7B68EE;
+        }
+
+        /* Hero Section */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 4rem 6rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 60vh;
+        }
+
+        .hero-content {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 2rem;
+            color: #2D2D2D;
+        }
+
+        .hero-content h1 .highlight {
+            color: #7B68EE;
+            font-weight: 800;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: #4A3F6D;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(74, 63, 109, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 63, 109, 0.4);
+        }
+
+        /* Bubble Mascot */
+        .hero-mascot {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bubble-mascot {
+            width: 400px;
+            height: 400px;
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .bubble-mascot svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 10px 30px rgba(123, 104, 238, 0.3));
+        }
+
+        /* Wave Section */
+        .wave-section {
+            position: relative;
+            margin-top: 4rem;
+        }
+
+        .wave {
+            width: 100%;
+            height: 150px;
+            background: #4A3F6D;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wave::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: #FAF6F1;
+            border-radius: 0 0 50% 50%;
+        }
+
+        .wave-layer {
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .wave-layer path {
+            animation: wave 15s linear infinite;
+        }
+
+        @keyframes wave {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Features Section */
+        .features {
+            background: #4A3F6D;
+            color: white;
+            padding: 6rem 3rem;
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        /* Code Example Section */
+        .code-section {
+            background: #FAF6F1;
+            padding: 6rem 3rem;
+        }
+
+        .code-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .code-container h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #2D2D2D;
+        }
+
+        .code-example {
+            background: #2D2D2D;
+            color: #F8F8F2;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: left;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            line-height: 1.8;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow-x: auto;
+        }
+
+        .keyword { color: #FF79C6; }
+        .string { color: #F1FA8C; }
+        .comment { color: #6272A4; }
+        .function { color: #50FA7B; }
+
+        /* Stats Section */
+        .stats {
+            background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+            color: white;
+            padding: 4rem 3rem;
+        }
+
+        .stats-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            text-align: center;
+        }
+
+        .stat h3 {
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+        }
+
+        .stat p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+
+        /* Footer */
+        footer {
+            background: #4A3F6D;
+            color: white;
+            padding: 3rem;
+            text-align: center;
+        }
+
+        footer a {
+            color: #B8A9FF;
+            text-decoration: none;
+            margin: 0 1rem;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .hero {
+                flex-direction: column-reverse;
+                padding: 2rem 1.5rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .bubble-mascot {
+                width: 250px;
+                height: 250px;
+            }
+
+            .features, .code-section {
+                padding: 3rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <a href="#" class="logo">
+            <span class="logo-icon">🫧</span>
+            WebBubble
+        </a>
+        <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#examples">Examples</a></li>
+            <li><a href="https://github.com/yourusername/webbubble">Docs</a></li>
+            <li><a href="https://github.com/yourusername/webbubble">Code</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>
+                WebBubble is a friendly framework for building 
+                <span class="highlight">fast web systems</span> that scale!
+            </h1>
+            <a href="https://github.com/yourusername/webbubble" class="cta-button">Try WebBubble</a>
+        </div>
+        <div class="hero-mascot">
+            <div class="bubble-mascot">
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Bubble body -->
+                    <circle cx="100" cy="100" r="90" fill="#B8A9FF" stroke="#4A3F6D" stroke-width="4"/>
+                    
+                    <!-- Shine effect -->
+                    <ellipse cx="75" cy="70" rx="25" ry="30" fill="rgba(255,255,255,0.4)"/>
+                    <circle cx="130" cy="85" r="12" fill="rgba(255,255,255,0.3)"/>
+                    
+                    <!-- Eyes -->
+                    <circle cx="75" cy="90" r="8" fill="#4A3F6D"/>
+                    <circle cx="125" cy="90" r="8" fill="#4A3F6D"/>
+                    
+                    <!-- Happy smile -->
+                    <path d="M 70 115 Q 100 135 130 115" stroke="#4A3F6D" stroke-width="5" fill="none" stroke-linecap="round"/>
+                    
+                    <!-- Rosy cheeks -->
+                    <circle cx="55" cy="105" r="12" fill="#FF9999" opacity="0.6"/>
+                    <circle cx="145" cy="105" r="12" fill="#FF9999" opacity="0.6"/>
+                    
+                    <!-- Sparkles around bubble -->
+                    <circle cx="30" cy="50" r="3" fill="#FFD700"/>
+                    <circle cx="170" cy="60" r="4" fill="#FFD700"/>
+                    <circle cx="180" cy="140" r="3" fill="#FFD700"/>
+                    <circle cx="25" cy="130" r="4" fill="#FFD700"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wave Section -->
+    <div class="wave-section">
+        <div class="wave"></div>
+    </div>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="features-container">
+            <h2>Why developers love WebBubble</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Blazing Fast</h3>
+                    <p>Handle 100K requests per second with just 2MB of RAM. Built in C/C++ for maximum performance.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Route Parameters</h3>
+                    <p>Dynamic routes like /users/:id work automatically. No configuration needed.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔀</div>
+                    <h3>Control Flow</h3>
+                    <p>If/else statements and while loops for complex business logic. Simple and powerful.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔧</div>
+                    <h3>Functions</h3>
+                    <p>Define reusable code with parameters and return values. Recursion supported!</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🗄️</div>
+                    <h3>SQLite Built-in</h3>
+                    <p>Database operations without extra setup. Query, insert, update - it all just works.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Cost Efficient</h3>
+                    <p>Cut cloud costs by 80%. Run 100 services on a single server.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Code Example -->
+    <section class="code-section" id="examples">
+        <div class="code-container">
+            <h2>See it in action ✨</h2>
+            <div class="code-example">
+<span class="comment">// A complete API with auth in 20 lines!</span>
+
+<span class="keyword">function</span> <span class="function">hashPassword</span>(password) {
+    <span class="keyword">return</span> crypto.hash(<span class="string">"sha256"</span>, password)
+}
+
+<span class="keyword">route</span> <span class="string">"POST /api/register"</span> {
+    db = database.<span class="function">connect</span>(<span class="string">"app.db"</span>)
+    
+    existing = db.<span class="function">queryOne</span>(<span class="string">"SELECT * FROM users WHERE email = ?"</span>, email)
+    
+    <span class="keyword">if</span> existing {
+        <span class="keyword">response</span> status=<span class="number">400</span> <span class="string">"Email already registered"</span>
+    } <span class="keyword">else</span> {
+        hashed = <span class="function">hashPassword</span>(password)
+        db.<span class="function">execute</span>(<span class="string">"INSERT INTO users (email, password) VALUES (?, ?)"</span>, email, hashed)
+        <span class="keyword">response</span> status=<span class="number">201</span> <span class="string">"User registered"</span>
+    }
+}
+
+<span class="comment">// Route params, control flow, functions, database - all built-in! 🫧</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat">
+                <h3>100K</h3>
+                <p>Requests/second</p>
+            </div>
+            <div class="stat">
+                <h3>500KB</h3>
+                <p>Binary size</p>
+            </div>
+            <div class="stat">
+                <h3>2MB</h3>
+                <p>Memory usage</p>
+            </div>
+            <div class="stat">
+                <h3>&lt;1ms</h3>
+                <p>Cold start time</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p style="font-size: 1.2rem; margin-bottom: 1rem;">
+            Ready to bubble up? 🫧
+        </p>
+        <p style="margin-bottom: 2rem;">
+            <a href="https://github.com/yourusername/webbubble" style="font-size: 1.3rem; font-weight: 600;">Get Started</a>
+        </p>
+        <p style="opacity: 0.8;">
+            <a href="#">Docs</a>
+            <a href="https://github.com/yourusername/webbubble">GitHub</a>
+            <a href="#">Discord</a>
+            <a href="#">Twitter</a>
+        </p>
+        <p style="margin-top: 2rem; opacity: 0.7;">
+            Made with 💜 by the WebBubble community
+        </p>
+    </footer>
+</body>
+</html>
