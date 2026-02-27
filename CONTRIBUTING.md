@@ -17,7 +17,7 @@ Thank you for your interest in contributing to WebBubble! We're excited to have 
 2. **Clone your fork**
 
    ```bash
-   git clone https://github.com/yourusername/webbubble.git
+   git clone https://github.com/ihave17bucks/webbubble.git
    cd webbubble
    ```
 
